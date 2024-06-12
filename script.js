@@ -54,3 +54,38 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    //login
+    if (loginForm) {
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+
+            const user = users.find(user => user.email === email && user.password === password);
+
+            if (user) {
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                window.location.href = 'home.html';
+            } else {
+                loginError.textContent = 'Incorrect email or password.';
+            }
+        });
+    }
+
+    //home page
+    if (welcomeMessage) {
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        } else {
+            welcomeMessage.textContent = `Welcome ${loggedInUser.name}`;
+        }
+
+        logoutButton.addEventListener('click', function () {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        });
+    }
+});
+
